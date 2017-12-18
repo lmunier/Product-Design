@@ -11,12 +11,13 @@ import os, re, base64
 from credFinder import returnCred
 from dico import type_cred
 
+my_DB = 'smartbin'
+
 class MySQL_Helper:
 
 	def __init__(self): # on fait la connexion ici, en décodant le password directement
-		Username, Password = returnCred(tyep_cred["mysql"])
-		self.MySQLConnector = pymysql.connect(user=Username, password=Password, database='hello_world',  host='localhost')
-		print("{0}, {1}".format(Username, Password))
+		Username, Password = returnCred(type_cred["mysql"])
+		self.MySQLConnector = pymysql.connect(user=Username, password=Password, database=my_DB,  host='localhost')
 
 	def close(self):
 		self.MySQLConnector.close()

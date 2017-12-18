@@ -25,7 +25,7 @@ def returnCred(credentials):
         my_password_mysql = base64.b64decode(password_mysql).decode('utf-8')
         my_password_mail = base64.b64decode(password_mail).decode('utf-8')
 
-	if credentials == type_cred["mail"]:
-		return mail, my_password_mail
-	elif credentials == type_cred["mysql"]:
-        	return user, my_password_mysql
+        if credentials == type_cred["mail"]:
+                return mail, my_password_mail
+        elif credentials == type_cred["mysql"]:
+                return user, my_password_mysql
