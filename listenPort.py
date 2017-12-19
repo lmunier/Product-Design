@@ -1,5 +1,12 @@
+#!/usr/bin/python3
+# -*-coding:Utf-8 -*
+
+# File to listen on the specified port
+
 import socket
 import select
+
+from manage_db import addData
 
 hote = ''
 port = 2048
@@ -43,8 +50,9 @@ while serveur_lance:
             msg_recu = client.recv(1024)
             # Peut planter si le message contient des caractères spéciaux
             msg_recu = msg_recu.decode()
+            addData(msg_recu)
             print("Reçu {}".format(msg_recu))
-            client.send(b"5 / 5")
+
             if msg_recu == "fin":
                 serveur_lance = False
 
