@@ -7,23 +7,35 @@
 import re
 from mariaDB import MySQL_Helper
 
-def refreshDataView():
-	dico_datas = {}
+def get_data(id_bin, number):
+	web_view = ""
 
 	# Create connector to database "smartbin"
 	database = MySQL_Helper()
 
-	query = "SELECT DISTINCT id_bin from filling_bins;"
+	query = "SELECT * from filling_bins WHERE id_bin = '{0}' ORDER BY timestamp LIMIT {1};".format(id_bin, number)
 	datas = database.ExecuteQuery(query)
 
 	for elements in datas:
-		query = "SELECT * from filling_bins WHERE id_bin = '{}' ORDER BY timestamp LIMIT 1;".format(elements[0])
-		last_time = database.ExecuteQuery(query)
-		dico_datas[elements[0]] = last_time[0]
+		web_view += "<div>Measurement: {0}</div><div>ID: {1}</div><div>Filling: {2}</div><div>Battery: {3}\n".format(elements[0], elements[1], elements[2], elements[3])
 
-	return dico_datas
+	return web_view
 
-def addData(data_to_add):
+def get_id():
+	str_bins_id = ""
+
+	# Create connector to databse "smartbin"
+	database = MySQL_Helper()
+
+	query = "SELECT DISTINCT id_bin from filling_bins;"
+	bins_id = database.ExecuteQuery(query)
+
+	for id in bins_id:
+		str_bins_id += str(id[0])
+
+	return str_bins_id
+
+def add_data(data_to_add):
 	# Recovery infos given
 	id_bin_val = re.findall(r'id_bin (.*),', data_to_add)[0]
 	filling_val = re.findall(r' filling (.*),', data_to_add)[0]
@@ -36,4 +48,4 @@ def addData(data_to_add):
 	database.ExecuteQuery(query)
 
 if __name__ == '__main__':
-	print("{}".format(dico))
+	print("{}".format(get_data('Test_bin 10', 4)))

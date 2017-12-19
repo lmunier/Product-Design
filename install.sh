@@ -25,4 +25,7 @@ sudo apt-get install -y mysql-server
 sudo apt-get install -y python3
 
 # Installing flask
-sudo apt-get install python3-flask
+#sudo apt-get install python3-flask
+
+# Installing php
+sudo apt-get install -y php
