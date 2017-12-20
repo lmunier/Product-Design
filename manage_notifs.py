@@ -8,9 +8,9 @@ import sys
 sys.path.insert(0, '/home/pi/Product-Design/')
 
 import smtplib
-from credFinder import return_cred
+from cred_finder import return_cred
 
-def send_mail(adress_who_send, adress_to_send, password, message):
+def send_mail(adress_to_send, message):
 	adress_who_send, password = return_cred(type_cred["mail"])
 
 	server = smtplib.SMTP('smtp.gmail.com', 587)

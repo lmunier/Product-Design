@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
-#lm201217.0402
+#lm201217.0517
 
 # File to listen on the specified port
 
@@ -14,7 +14,6 @@ port = 2048
 
 connexion_principale = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connexion_principale.bind((hote, port))
-print("Le serveur écoute à présent sur le port {}".format(port))
 
 serveur_lance = True
 
@@ -22,46 +21,40 @@ while serveur_lance:
     connexion_principale.listen(5)
     clients_connectes = []
 
-    # On va vérifier que de nouveaux clients ne demandent pas à se connecter
-    # Pour cela, on écoute la connexion_principale en lecture
-    # On attend maximum 50ms
+    # Listen on connection port to know if client would like to connect, 50ms wait max
     connexions_demandees, wlist, xlist = select.select([connexion_principale], [], [], 0.05)
 
     for connexion in connexions_demandees:
         connexion_avec_client, infos_connexion = connexion.accept()
-        # On ajoute le socket connecté à la liste des clients
+
+        # Add socket to client list
         clients_connectes.append(connexion_avec_client)
 
-    # Maintenant, on écoute la liste des clients connectés
-    # Les clients renvoyés par select sont ceux devant être lus (recv)
-    # On attend là encore 50ms maximum
-    # On enferme l'appel à select.select dans un bloc try
-    # En effet, si la liste de clients connectés est vide, une exception
-    # Peut être levée
+    # We test client_a_lire, if it's empty we have an exception
     clients_a_lire = []
     try:
         clients_a_lire, wlist, xlist = select.select(clients_connectes, [], [], 0.05)
     except select.error:
         pass
     else:
-        # On parcourt la liste des clients à lire
+        # We browse our client list
         for client in clients_a_lire:
-            # Client est de type socket
+            # Client is a socket type
             msg_recu = client.recv(1024)
-            # Peut planter si le message contient des caractères spéciaux
+
+            # Can fail if msg_recu have special characters
             msg_recu = msg_recu.decode()
             add_data(msg_recu)
-            print("{}".format(msg_recu))
 
             # Send confirmation to client and close it
             client.send(b"y")
             client.close()
 
             # Possibility to close all the connections
-            if msg_recu == "fin":
+            if msg_recu == "f":
                 serveur_lance = False
 
-print("Fermeture des connexions")
+# close all the connections
 for client in clients_connectes:
     client.close()
 

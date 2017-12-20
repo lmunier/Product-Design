@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
-#lm201217.0405
+#lm201217.0519
 
 # File to manage database
 
@@ -9,14 +9,14 @@ sys.path.insert(0, '/home/pi/Product-Design/')
 
 import pymysql.cursors
 import os, re, base64
-from credFinder import return_cred
+from cred_finder import return_cred
 from dico import type_cred
 
 my_DB = 'smartbin'
 
 class MySQL_Helper:
 
-	def __init__(self): # on fait la connexion ici, en décodant le password directement
+	def __init__(self): # We init a connection to our database 'smartbin'
 		Username, Password = return_cred(type_cred["mysql"])
 		self.MySQLConnector = pymysql.connect(user=Username, password=Password, database=my_DB,  host='localhost')
 
@@ -24,19 +24,19 @@ class MySQL_Helper:
 		self.MySQLConnector.close()
 
 	def ExecuteQuery(self, SQLQuery, ReturnAsDictList=False):
-		self.MySQLCursor = self.MySQLConnector.cursor() #création du curseur
-		self.MySQLCursor.execute(SQLQuery) #exécution de la requête
-		self.MySQLConnector.commit() #envoi de la requete à la DB
+		self.MySQLCursor = self.MySQLConnector.cursor() 	# Ccreate cursor
+		self.MySQLCursor.execute(SQLQuery) 			# Execute query
+		self.MySQLConnector.commit() 				# Send query to our database
 
 		self.ReturnedRows = []
 
-		while True: #itère jusqu'à trouver une ligne entièremene entièrement vide
-			Row = self.MySQLCursor.fetchone() #fetch les lignes
+		while True: 						# Read all elements to find an empty one
+			Row = self.MySQLCursor.fetchone() 		# Fetch lines
 
 			if Row is None:
 				break
 			else:
 				self.ReturnedRows.append(Row)
 
-		return self.ReturnedRows #retourne quand tout a été fetch
+		return self.ReturnedRows 				# Return when all is fetch
 
