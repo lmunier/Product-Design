@@ -1,30 +1,31 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
+#lm201217.0402
 
 # File to listen on the specified port
 
 import socket
 import select
 
-from manage_db import addData
+from manage_db import add_data
 
 hote = ''
 port = 2048
 
 connexion_principale = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connexion_principale.bind((hote, port))
-connexion_principale.listen(5)
 print("Le serveur écoute à présent sur le port {}".format(port))
 
 serveur_lance = True
-clients_connectes = []
 
 while serveur_lance:
+    connexion_principale.listen(5)
+    clients_connectes = []
+
     # On va vérifier que de nouveaux clients ne demandent pas à se connecter
     # Pour cela, on écoute la connexion_principale en lecture
     # On attend maximum 50ms
-    connexions_demandees, wlist, xlist = select.select([connexion_principale],
-                                                       [], [], 0.05)
+    connexions_demandees, wlist, xlist = select.select([connexion_principale], [], [], 0.05)
 
     for connexion in connexions_demandees:
         connexion_avec_client, infos_connexion = connexion.accept()
@@ -39,8 +40,7 @@ while serveur_lance:
     # Peut être levée
     clients_a_lire = []
     try:
-        clients_a_lire, wlist, xlist = select.select(clients_connectes,
-                                                     [], [], 0.05)
+        clients_a_lire, wlist, xlist = select.select(clients_connectes, [], [], 0.05)
     except select.error:
         pass
     else:
@@ -50,9 +50,14 @@ while serveur_lance:
             msg_recu = client.recv(1024)
             # Peut planter si le message contient des caractères spéciaux
             msg_recu = msg_recu.decode()
-            addData(msg_recu)
-            print("Reçu {}".format(msg_recu))
+            add_data(msg_recu)
+            print("{}".format(msg_recu))
 
+            # Send confirmation to client and close it
+            client.send(b"y")
+            client.close()
+
+            # Possibility to close all the connections
             if msg_recu == "fin":
                 serveur_lance = False
 

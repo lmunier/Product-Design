@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
-#lm181217.0145
+#lm201217.0405
 
 # File to refresh data on the webpage
 
@@ -37,15 +37,17 @@ def get_id():
 
 def add_data(data_to_add):
 	# Recovery infos given
-	id_bin_val = re.findall(r'id_bin (.*),', data_to_add)[0]
-	filling_val = re.findall(r' filling (.*),', data_to_add)[0]
-	battery_val = re.findall(r' battery (.*)', data_to_add)[0]
+	id_bin_val = re.findall(r'id\_bin ([\w ]*),', data_to_add)[0]
+	filling_val = re.findall(r'filling (.*),', data_to_add)[0]
+	battery_val = re.findall(r'battery (.*)', data_to_add)[0]
+
+	print("{}{}{}".format(id_bin_val, filling_val, battery_val))
 
 	# Create connector to database "smartbin"
-	database = MySQL_Helper()
+#	database = MySQL_Helper()
 
-	query = "INSERT INTO filling_bins (timestamp, id_bin, filling, battery) VALUES(NOW(), '{0}', {1}, {2});".format(id_bin_val, filling_val, battery_val)
-	database.ExecuteQuery(query)
+#	query = "INSERT INTO filling_bins (timestamp, id_bin, filling, battery) VALUES(NOW(), '{0}', {1}, {2});".format(id_bin_val, filling_val, battery_val)
+#	database.ExecuteQuery(query)
 
 if __name__ == '__main__':
-	print("{}".format(get_data('Test_bin 10', 4)))
+	add_data("id_bin test 10, filling 10, battery 50")

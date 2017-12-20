@@ -1,5 +1,9 @@
 #!/bin/bash
+#-*-coding:Utf-8 -*
+#lm201217.0404
+
 # Script pour automatiser l'installation du serveur lamp
+
 
 # Update system
 sudo apt-get update

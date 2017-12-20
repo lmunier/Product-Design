@@ -1,5 +1,6 @@
 #!/bin/usr/python3
 # -*-coding:Utf-8 -*
+#lm201217.0403
 
 # File to return credentials stocked in another secured file
 
@@ -10,7 +11,7 @@ import re
 import base64
 from dico import type_cred
 
-def returnCred(credentials):
+def return_cred(credentials):
         # Get credentials from MySQL Python Agent config file
         fid = open('/home/pi/pythonAgent.conf', 'r')
         ConfigFileBody = fid.read()
