@@ -6,8 +6,13 @@
 
 import socket
 import select
+import re
+import os
 
+from cred_finder import return_cred
 from manage_db import add_data
+from dico import type_cred
+import manage_notifs
 
 hote = ''
 port = 2048
@@ -45,6 +50,12 @@ while serveur_lance:
             # Can fail if msg_recu have special characters
             msg_recu = msg_recu.decode()
             add_data(msg_recu)
+
+            filling_val = re.findall(r'filling (.*),', msg_recu)[0]
+            if int(filling_val) >= 90:
+                mail, my_password_mail = return_cred(type_cred["mail"])
+                send_mail(mail, filling_val)
+                os.system("python3 /home/pi/Product-Design/manage_notifs.py")
 
             # Send confirmation to client and close it
             client.send(b"y")
