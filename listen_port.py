@@ -7,7 +7,6 @@
 import socket
 import select
 import re
-import os
 
 from cred_finder import return_cred
 from manage_db import add_data
@@ -54,8 +53,7 @@ while serveur_lance:
             filling_val = re.findall(r'filling (.*),', msg_recu)[0]
             if int(filling_val) >= 90:
                 mail, my_password_mail = return_cred(type_cred["mail"])
-                send_mail(mail, filling_val)
-                os.system("python3 /home/pi/Product-Design/manage_notifs.py")
+                manage_notifs.send_mail(mail, filling_val)
 
             # Send confirmation to client and close it
             client.send(b"y")
