@@ -1,5 +1,9 @@
 #!/bin/bash
+#-*-coding:Utf-8 -*
+#lm201217.0404
+
 # Script pour automatiser l'installation du serveur lamp
+
 
 # Update system
 sudo apt-get update
@@ -23,3 +27,9 @@ sudo apt-get install -y mysql-server
 
 # Installing python
 sudo apt-get install -y python3
+
+# Installing flask
+#sudo apt-get install python3-flask
+
+# Installing php
+sudo apt-get install -y php
